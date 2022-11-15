@@ -98,7 +98,7 @@ En la siguiente instalación no se han usado dockers:
   
  - [PIP](https://pip.pypa.io/en/stable/installing/)
  ```
- python3.7 get-pip.py
+ python3.7 -m pip install pip
  ```
  - [SBT](https://www.scala-sbt.org/release/docs/Setup.html) 
  
