@@ -98,14 +98,6 @@ En la siguiente instalación no se han usado dockers:
  ```
  sudo mv idea-IC-222.4345.14 /opt/intellij
  ```
- Para iniciar Intellij se ha ejecutado el siguiente comando:
- ```
- /opt/intellij/bin/idea.sh
- ```
- 
- Se destaca que este último comando debe ser ejecutado desde un sitio que permita interfaz gráfica, ya que por ssh no se podrá abrir.Para que se pueda ejecutar desde el terminal a través de la interfaz gráfica de Ubuntu. Una vez ejecutado saldrá la siguiente imágen:
- ![image](https://user-images.githubusercontent.com/116291122/201998756-98387db5-7ebf-476a-b629-b4ef0c8fb67f.png)
-
  
  Para instalar la jdk_1.8 se ha ejecutado el siguiente comando:
  ```
@@ -337,10 +329,26 @@ En la siguiente instalación no se han usado dockers:
   Then run the code using Intellij or spark-submit with their respective arguments. 
   
   (!) - Con Intellij:
+   Para iniciar Intellij se ha ejecutado el siguiente comando:
+ ```
+ sudo /opt/intellij/bin/idea.sh
+ ```
+ 
+ Se destaca que este último comando debe ser ejecutado desde un sitio que permita interfaz gráfica, ya que por ssh no se podrá abrir.Para que se pueda ejecutar desde el terminal a través de la interfaz gráfica de Ubuntu. Una vez ejecutado saldrá la siguiente imágen:
+ ![image](https://user-images.githubusercontent.com/116291122/201998756-98387db5-7ebf-476a-b629-b4ef0c8fb67f.png)
+
   Se abre el proyecto `flight_prediction`:
   ![image](https://user-images.githubusercontent.com/116291122/201999087-cc7c1c7a-1eba-4f72-a104-acfdf58b9e0d.png)
   
   Se hace clic en "Confiar en el proyecto", y se ejecuta el fichero MakePredictions.scala
+  
+  Se compila el proyecto y se arranca. Al arrancar nos pedirá instalar el plugin de Scala:
+  ![image](https://user-images.githubusercontent.com/116291122/202000928-c2f222fd-2bd6-415c-94b4-f2871fb77b37.png)
+
+  Una vez instalado, se reinicia Intellij, y una vez reiniciado se importa sbt. Esto último te pedirá que lo hagas de manera automática.
+  
+  ya se podrá arrancar el programa:
+  
   
   (!) - Con Spark-submit:
   - En primer lugar, se ha necesitado ejecutar un máster con el comando 
