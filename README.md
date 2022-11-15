@@ -1,4 +1,6 @@
 # Agile_Data_Code_2
+PABLO RUBIO NOGUERA - JAVIER RAMÍREZ RUIZ
+MUIRST CURSO 2022/2023
 
 Code for [Agile Data Science 2.0](http://shop.oreilly.com/product/0636920051619.do), O'Reilly 2017. Now available at the [O'Reilly Store](http://shop.oreilly.com/product/0636920051619.do), on [Amazon](https://www.amazon.com/Agile-Data-Science-2-0-Applications/dp/1491960116) (in Paperback and Kindle) and on [O'Reilly Safari](https://www.safaribooksonline.com/library/view/agile-data-science/9781491960103/). Also available anywhere technical books are sold!
 
@@ -85,6 +87,11 @@ The following list includes some links with the installation procedure for each 
 En la siguiente instalación no se han usado dockers:
 
  - [Intellij](https://www.jetbrains.com/help/idea/installation-guide.html) (jdk_1.8)
+ Para instalar la jdk_1.8 se ha ejecutado el siguiente comando:
+ ```
+ sudo apt install openjdk-8-jdk
+ ```
+ 
  - [Pyhton3](https://realpython.com/installing-python/) (Suggested version 3.7) 
   ```
   sudo apt install python3.7
@@ -131,14 +138,60 @@ En la siguiente instalación no se han usado dockers:
  sudo systemctl mongod status
  ```
  - [Spark](https://spark.apache.org/docs/latest/) (Mandatory version 3.1.2)
+ Para su instalación, se ha descargado el siguiente fichero:
+ ```
+ https://mirrors.estointernet.in/apache/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
+ ```
+ 
+ Posteriormente, se ha descomprimido con el siguiente comando:
+ ```
+ tar - zxvf spark-3.1.2-bin-hadoop3.2.tgz
+ ```
+ 
+ Y finalmente, se ha copiado a la carpeta /opt de la siguiente manera para que fuera reconocido en el sistema:
+ ```
+ sudo mv spark-3.1.2-bin-hadoop3.2 /opt/spark
+ ```
+ Además, se ha necesitado configurar las variables del entorno de forma permanente editando el fichero ~/.bashrc.
+ Se han añadido a él las siguientes líneas:
+ ```
+ export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+ export SPARK_HOME=/opt/spark
+ export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+ ```
+ 
  - [Scala](https://www.scala-lang.org)(Suggested version 2.12)
+ Para instalar Scala 2.12 se han ejecutado los siguientes comandos:
+ ```
+ sudo apt-get remove scala-library scala
+ sudo wget https://downloads.lightbend.com/scala/2.12.3/scala-2.12.3.deb
+ sudo dpkg -i scala-2.12.3.deb
+ ```
  - [Zookeeper](https://zookeeper.apache.org/releases.html)
+ Antes de instalar Zookeeper, se ha necesitado crear un usuario nuevo con los siguientes comandos:
+ ```
+ useradd zookeeper -m
+ usermod --shell /bin/bash zookeeper
+ passwd zookeeper
+ usermod -aG sudo zookeeper
+ mkdir /zookeeper
+ chown -R zookeeper:zookeeper /zookeeper
+ ```
+ 
+ A continuación, se ha descargado la última versión estable de Zookeeper disponible:
+ ```
+ wget https://www.apache.org/dyn/closer.lua/zookeeper/zookeeper-3.7.1/apache-zookeeper-3.7.1-bin.tar.gz
+ tar - zxvf apache-zookeeper-3.7.1-bin.tar.gz
+ sudo mv apache-zookeeper-3.7.1-bin /opt/zookeeper
+ chown -R zookeeper:zookeeper /opt/zookeeper
+ ```
+ 
  - [Kafka](https://kafka.apache.org/quickstart) (Mandatory version kafka_2.12-3.0.0)
  
- ### Install python libraries
  
+ ### Para instalar las dependencias Python requeridas, se ha ejecutado el siguiente comando:
  ```
-  pip install -r requirements.txt
+ python3.7 -m pip install -r requirements.txt
  ```
  ### Start Zookeeper
  
@@ -199,7 +252,17 @@ En la siguiente instalación no se han usado dockers:
   
   oct 01 14:58:53 amunoz systemd[1]: Started MongoDB Database Server.
   ```
-  Run the import_distances.sh script
+  Una vez esté MongoDB funcionando, se ha editado el fichero import_distances.sh, y se ha modificado el comando:
+  ```
+  mongo agile_data_science --eval 'db.origin_dest_distances.ensureIndex({Origin: 1, Dest: 1})'
+
+  ```
+  ...por el comando:
+  ```
+  mongosh agile_data_science --eval 'db.origin_dest_distances.ensureIndex({Origin: 1, Dest: 1})'
+
+  ```
+  Habiéndo sustituido mongo por mongosh. Una vez terminado esto, se puede ejecutar el script con el siguiente comando:
   ```
   ./resources/import_distances.sh
   ```
@@ -224,15 +287,7 @@ En la siguiente instalación no se han usado dockers:
   ```
     cd practica_big_data_2019
   ```
-  Set the `JAVA_HOME` env variable with teh path of java installation directory, for example:
-  ```
-    export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
-  ```
-  Set the `SPARK_HOME` env variable with teh path of your Spark installation folder, for example:
-  ```
-    export SPARK_HOME=/opt/spark
-  ```
-  Now, execute the script `train_spark_mllib_model.py`
+  Al haber establecido anteriormente las variables del entorno, podemos directamente ejecutar el script `train_spark_mllib_model.py`
   ```
       python3 resources/train_spark_mllib_model.py .
   ```
@@ -242,6 +297,7 @@ En la siguiente instalación no se han usado dockers:
   ls ../models
   
   ```   
+  
   ## Run Flight Predictor
   First, you need to change the base_paht val in the MakePrediction scala class,
   change that val for the path where you clone repo is placed:
@@ -249,13 +305,39 @@ En la siguiente instalación no se han usado dockers:
     val base_path= "/home/user/Desktop/practica_big_data_2019"
     
   ``` 
+  
+  Una vez cambiado el `base_path`, nos volvemos a situar en la carpeta raíz del proyecto, y ejecutamos los siguientes comandos:
+  ```
+  sbt
+  compile
+  package
+  ```
+  Una vez terminado, salimos de sbt, y comprobamos que en el directorio target/scala-2.12/ está el JAR compilado.
+  
   Then run the code using Intellij or spark-submit with their respective arguments. 
   
-Please, note that in order to use spark-submit you first need to compile the code and build a JAR file using sbt. Also, when running the spark-submit command, you have to add at least these two packages with the --packages option:
+  Con Intellij:
+  ...
+  
+  Con Spark-submit:
+  - En primer lugar, se ha necesitado ejecutar un máster con el comando 
   ```
-  --packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.1,org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.2
-     
+  start-master.sh -h 0.0.0.0
+  ```
+  - En segundo lugar, se ha ejecutado un worker con el siguiente comando:
+  ```
+  start-worker.sh spark://127.0.0.1:7077
+  ```
+  Se destaca que si el máster y el worker están dentro de la misma máquina, los comandos anteriores son válidos. Si están en distintas máquinas, hay que sustituir `127.0.0.1` por la dirección en la que el worker encuentre alcalzable al máster.
+  
+Please, note that in order to use spark-submit you first need to compile the code and build a JAR file using sbt. 
+Una vez compilado el JAR, se usará el siguiente comando para lanzar spark-submit:
+  ```
+ spark-submit --master spark://127.0.0.1:7077 --deploy-mode cluster --packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.1,org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.2 /home/javier/practica_big_data_2019/flight_prediction/target/scala-2.12/flight_prediction_2.12-0.1.jar
+    
   ``` 
+  De igual manera, se destaca que `127.0.0.1` tiene que ser la dirección por la que el worker encuentre al máster se alcanzable. Así mismo, ` /home/javier/practica_big_data_2019/flight_prediction/target/scala-2.12/flight_prediction_2.12-0.1.jar` debe ser sustituído por el path en el cual el JAR está alcanzable. 
+  
    Be carefull with the packages version because if you are using another version of spark, kafka or mongo you have to choose the correspondent version to your installation. This packages work with Spark 3.1.2, kafka_2.12-3.1.2 and mongo superior to 2.6
   
   ## Start the prediction request Web Application
@@ -277,7 +359,7 @@ Please, note that in order to use spark-submit you first need to compile the cod
   ## Check the predictions records inserted in MongoDB
   ```
    $ mongo
-   > use use agile_data_science;
+   > use agile_data_science;
    >db.flight_delay_classification_response.find();
   
   ```
@@ -299,11 +381,16 @@ Please, note that in order to use spark-submit you first need to compile the cod
 
 ```shell
 cd resources/airflow
-pip install -r requirements.txt -c constraints.txt
+python3.7 -m pip install -r requirements.txt -c constraints.txt
 ```
 - Set the `PROJECT_HOME` env variable with the path of you cloned repository, for example:
 ```
 export PROJECT_HOME=/home/user/Desktop/practica_big_data_2019
+```
+
+- Establece un nuevo valor en la variable PATH para que encuentre el sistema el comando airflow:
+```
+export PATH=$PATH:~/.local/bin
 ```
 - Configure airflow environment
 
@@ -315,22 +402,43 @@ mkdir $AIRFLOW_HOME/plugins
 
 airflow users create \
     --username admin \
+    --password admin \
     --firstname Jack \
     --lastname  Sparrow\
     --role Admin \
     --email example@mail.org
 ```
+
+Posteriormente, para iniciar airflow, es necesario inicializar su base de datos con el siguiente comando:
+```
+airflow db init
+```
 - Start airflow scheduler and webserver
 ```shell
-airflow webserver --port 8080
-airflow sheduler
+airflow webserver --port 8082
+airflow scheduler
 ```
-Vistit http://localhost:8080/home for the web version of Apache Airflow.
+Vistit http://localhost:8082/home for the web version of Apache Airflow.
 
 - The DAG is defined in `resources/airflow/setup.py`.
 - **TODO**: add the DAG and execute it to train the model (see the official documentation of Apache Airflow to learn how to exectue and add a DAG with the airflow command).
+Para poder añadir el DAG se ha necesitado ejecutar el siguiente comando desde la carpeta practica_big_data_2019:
+```
+sudo cp /resources/airflow/setup.py /home/javier/airflow/dags/ 
+
+```
+Una vez copiado, se comprueba si el DAG ha sido instalado correctamente mirando el listado de DAGS instalados con el comando `airflow dags list`.
+Al final, se destaca que a través de la interfaz web se puede iniciar el DAG iniciando sesión con el usuario `admin` y la contraseña `admin`.
+
+
 - **TODO**: explain the architecture of apache airflow (see the official documentation of Apache Airflow).
+![image](https://user-images.githubusercontent.com/116291122/201914803-601fe608-0ee2-4474-849e-c4e602472ff0.png)
+
+![image](https://user-images.githubusercontent.com/116291122/201914881-410fee9f-a0f8-4988-a71d-83db8e40483a.png)
+
 - **TODO**: analyzing the setup.py: what happens if the task fails?, what is the peridocity of the task?
+![image](https://user-images.githubusercontent.com/116291122/201914987-c357b33b-2dfb-4e2e-810b-c1c62fa2d4ed.png)
+![image](https://user-images.githubusercontent.com/116291122/201915082-4b017406-0a1d-4436-9555-18ea3bffc134.png)
 
 ![Apache Airflow DAG success](images/airflow.jpeg)
 
