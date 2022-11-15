@@ -96,7 +96,7 @@ En la siguiente instalación no se han usado dockers:
  ```
  Y la carpeta resultante la hemos movido a /opt con el siguiente comando:
  ```
- sudo mv ideaIC-2022.2.3 /opt/intellij
+ sudo mv idea-IC-222.4345.14 /opt/intellij
  ```
  Para iniciar Intellij se ha ejecutado el siguiente comando:
  ```
