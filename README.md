@@ -364,7 +364,7 @@ Una vez compilado el JAR, se usará el siguiente comando para lanzar spark-submi
   
   ## Check the predictions records inserted in MongoDB
   ```
-   $ mongo
+   $ mongosh
    > use agile_data_science;
    >db.flight_delay_classification_response.find();
   
