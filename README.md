@@ -1,6 +1,5 @@
 # Agile_Data_Code_2
-PABLO RUBIO NOGUERA - JAVIER RAMÍREZ RUIZ
-MUIRST CURSO 2022/2023
+PABLO RUBIO NOGUERA - JAVIER RAMÍREZ RUIZ - MUIRST CURSO 2022/2023
 
 Code for [Agile Data Science 2.0](http://shop.oreilly.com/product/0636920051619.do), O'Reilly 2017. Now available at the [O'Reilly Store](http://shop.oreilly.com/product/0636920051619.do), on [Amazon](https://www.amazon.com/Agile-Data-Science-2-0-Applications/dp/1491960116) (in Paperback and Kindle) and on [O'Reilly Safari](https://www.safaribooksonline.com/library/view/agile-data-science/9781491960103/). Also available anywhere technical books are sold!
 
