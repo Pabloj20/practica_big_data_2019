@@ -349,7 +349,7 @@ Una vez compilado el JAR, se usará el siguiente comando para lanzar spark-submi
   Go to the `web` directory under `resources` and execute the flask web application file `predict_flask.py`:
   ```
   cd practica_big_data_2019/resources/web
-  python3 predict_flask.py
+  python3.7 predict_flask.py
   
   ```
   Now, visit http://localhost:5000/flights/delays/predict_kafka and, for fun, open the JavaScript console. Enter a nonzero departure delay, an ISO-formatted date (I used 2016-12-25, which was in the future at the time I was writing this), a valid carrier code (use AA or DL if you don’t know one), an origin and destination (my favorite is ATL → SFO), and a valid flight number (e.g., 1519), and hit Submit. Watch the debug output in the JavaScript console as the client polls for data from the response endpoint at /flights/delays/predict/classify_realtime/response/.
