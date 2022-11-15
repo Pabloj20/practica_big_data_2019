@@ -86,6 +86,23 @@ The following list includes some links with the installation procedure for each 
 En la siguiente instalación no se han usado dockers:
 
  - [Intellij](https://www.jetbrains.com/help/idea/installation-guide.html) (jdk_1.8)
+ Para instalar Intellij en Ubuntu se ha descargado el programa con el siguiente comando:
+ ```
+ https://download.jetbrains.com/idea/ideaIC-2022.2.3.tar.gz
+ ```
+ Después se ha descomprimido con el siguiente comando:
+ ```
+ tar -xvf ideaIC-2022.2.3.tar.gz
+ ```
+ Y la carpeta resultante la hemos movido a /opt con el siguiente comando:
+ ```
+ sudo mv ideaIC-2022.2.3 /opt/intellij
+ ```
+ Para iniciar Intellij se ha ejecutado el siguiente comando:
+ ```
+ /opt/intellij/bin/idea.sh
+ ```
+ 
  Para instalar la jdk_1.8 se ha ejecutado el siguiente comando:
  ```
  sudo apt install openjdk-8-jdk
