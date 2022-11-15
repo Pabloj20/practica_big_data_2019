@@ -82,11 +82,54 @@ resources/download_data.sh
 You need to install each component included in the architecture. 
 The following list includes some links with the installation procedure for each component:
 
+En la siguiente instalación no se han usado dockers:
+
  - [Intellij](https://www.jetbrains.com/help/idea/installation-guide.html) (jdk_1.8)
  - [Pyhton3](https://realpython.com/installing-python/) (Suggested version 3.7) 
+  ```
+  sudo apt install python3.7
+  ```
+  
  - [PIP](https://pip.pypa.io/en/stable/installing/)
+ ```
+ python3.7 get-pip.py
+ ```
  - [SBT](https://www.scala-sbt.org/release/docs/Setup.html) 
+ 
+ ```
+ sudo apt install sbt
+ ```
+ 
  - [MongoDB](https://docs.mongodb.com/manual/installation/)
+ Se ha importado en primer lugar la clave pública del repositorio:
+ ```
+ wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+ ```
+ 
+ Luego para una instalación en Ubuntu 20.04, se ha empleado el siguiente comando:
+ ```
+ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.lis
+ ```
+ Por último se han actualizado los repositorios:
+ 
+ ```
+ sudo apt-get update
+ ```
+ 
+ Y se ha instalado finalmente mongoDB
+ ```
+ sudo apt-get install -y mongodb-org
+ ```
+ 
+ Para iniciarlo se ha ejecutado el siguiente comando:
+ ```
+ sudo systemctl mongod start
+ ```
+ 
+ Para verificar que está funcionando se ha ejecutado el siguiente comando:
+ ```
+ sudo systemctl mongod status
+ ```
  - [Spark](https://spark.apache.org/docs/latest/) (Mandatory version 3.1.2)
  - [Scala](https://www.scala-lang.org)(Suggested version 2.12)
  - [Zookeeper](https://zookeeper.apache.org/releases.html)
