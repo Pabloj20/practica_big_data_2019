@@ -346,8 +346,9 @@ En la siguiente instalación no se han usado dockers:
   ![image](https://user-images.githubusercontent.com/116291122/202000928-c2f222fd-2bd6-415c-94b4-f2871fb77b37.png)
 
   Una vez instalado, se reinicia Intellij, y una vez reiniciado se importa sbt. Esto último te pedirá que lo hagas de manera automática.
-  
-  ya se podrá arrancar el programa:
+  Una vez se han instalado todas las dependencias que quedan, ya se podrá arrancar el programa:
+  ![image](https://user-images.githubusercontent.com/116291122/202043711-000c7321-c219-40e7-97f3-bb017c0e2b1b.png)
+
   
   
   (!) - Con Spark-submit:
