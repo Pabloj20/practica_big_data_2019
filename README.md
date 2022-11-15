@@ -338,6 +338,10 @@ Una vez compilado el JAR, se usará el siguiente comando para lanzar spark-submi
   ``` 
   De igual manera, se destaca que `127.0.0.1` tiene que ser la dirección por la que el worker encuentre al máster se alcanzable. Así mismo, ` /home/javier/practica_big_data_2019/flight_prediction/target/scala-2.12/flight_prediction_2.12-0.1.jar` debe ser sustituído por el path en el cual el JAR está alcanzable. 
   
+  Si se visita la página http://localhost:8080 , donde localhost es la dirección por la que tu navegador encuentra alcanzable al máster, accederás al web UI de Spark, donde se pueden ver los hilos trabajadores y sus correspondientes logs:
+  ![image](https://user-images.githubusercontent.com/116291122/201915602-2f163b7d-649f-4ff0-9bd9-a7bd12561e74.png)
+
+  
    Be carefull with the packages version because if you are using another version of spark, kafka or mongo you have to choose the correspondent version to your installation. This packages work with Spark 3.1.2, kafka_2.12-3.1.2 and mongo superior to 2.6
   
   ## Start the prediction request Web Application
@@ -354,6 +358,8 @@ Una vez compilado el JAR, se usará el siguiente comando para lanzar spark-submi
   ```
   Now, visit http://localhost:5000/flights/delays/predict_kafka and, for fun, open the JavaScript console. Enter a nonzero departure delay, an ISO-formatted date (I used 2016-12-25, which was in the future at the time I was writing this), a valid carrier code (use AA or DL if you don’t know one), an origin and destination (my favorite is ATL → SFO), and a valid flight number (e.g., 1519), and hit Submit. Watch the debug output in the JavaScript console as the client polls for data from the response endpoint at /flights/delays/predict/classify_realtime/response/.
   
+  ![image](https://user-images.githubusercontent.com/116291122/201915445-3ed01140-6334-4129-80c9-9b3cf710605c.png)
+
   Quickly switch windows to your Spark console. Within 10 seconds, the length we’ve configured of a minibatch, you should see something like the following:
   
   ## Check the predictions records inserted in MongoDB
