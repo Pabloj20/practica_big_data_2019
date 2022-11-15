@@ -443,10 +443,11 @@ Al final, se destaca que a través de la interfaz web se puede iniciar el DAG in
 ![image](https://user-images.githubusercontent.com/116291122/201914881-410fee9f-a0f8-4988-a71d-83db8e40483a.png)
 
 - **TODO**: analyzing the setup.py: what happens if the task fails?, what is the peridocity of the task?
-![image](https://user-images.githubusercontent.com/116291122/201914987-c357b33b-2dfb-4e2e-810b-c1c62fa2d4ed.png)
+![image](https://user-images.githubusercontent.com/116291122/201916296-b7e0a057-674f-472d-8213-d9295174b285.png)
+
 ![image](https://user-images.githubusercontent.com/116291122/201915082-4b017406-0a1d-4436-9555-18ea3bffc134.png)
 
-![Apache Airflow DAG success](images/airflow.jpeg)
+![image](https://user-images.githubusercontent.com/116291122/201916337-9cf8ba9f-f0b2-4542-a273-bd2169b29575.png)
 
 
 
