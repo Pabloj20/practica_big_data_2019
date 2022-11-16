@@ -485,6 +485,60 @@ Al final, se destaca que a través de la interfaz web se puede iniciar el DAG in
 ![image](https://user-images.githubusercontent.com/116291122/201916337-9cf8ba9f-f0b2-4542-a273-bd2169b29575.png)
 
 
+Para hacer la práctica con Docker:
+En el caso de google Cloud hay que exportar el puerto 8080 para que sea visible desde fuera. Eso se hace añadiendo el comando "-p direccion_interna:8080:8080" al docker run. En este caso la dirección interna es 10.204.0.3. También será necesario abrir ese puerto. 
+
+```
+docker run -d --name spark-worker \
+  --network=fbid \
+  -e SPARK_MODE=worker \
+-p 10.204.0.3:8081:8081 \
+-v dataworker:/home \
+-v /home/rubionoguerapablo/jars_dir:/opt/bitnami/spark/.ivy2:z \
+  bitnami/spark:3.1.2
+```
+
+jars_dir debe contener las dependencias de maven que se encuentran en /root/.ivy2
+Para que se pueda ejecutar el `spark-submit` es necesario crear un darle permiso de tipo 777 a jars_dir. El comando es sudo `chmod -R 777 jars_dir/`
+
+```
+docker exec spark-worker \
+spark-submit --master spark://spark-master:7077 --deploy-mode cluster \
+--packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.1,org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.2 \
+/home/practica_big_data_2019/flight_prediction/target/scala-2.12/flight_prediction_2.12-0.1.jar
+```
+
+Para el docker de flask lo primero que hay que hacer es modificar dónde se encuentra kafka. En nuestro caso es en `kafka-server:9092`.
+Tambien hay que cambiar la dirección de mongo que será: MongoClient('mongodb://mongofbid:27017')
+En la carpeta practica_big_data_2019 se crea el siguiente Dockerfile:
+
+```
+FROM python:3.7.15
+
+WORKDIR /usr/src/app
+
+ENV PROJECT_HOME=/usr/src/app
+
+COPY requirements.txt requirements.txt
+
+RUN python3.7 -m pip install --upgrade pip
+RUN python3.7 -m pip install -r requirements.txt
+RUN python3.7 -m pip install joblib
+
+COPY . .
+
+CMD [ "python3.7", "./resources/web/predict_flask.py" ]
+```
+
+Posteriormente para crear una imagen de ese Dockerfile se ejecuta el siguiente comando:
+```
+docker image build -t flask_image .
+```
+Por último, se ejecuta el comando:
+```
+docker run -d --name flask_app --network fbid -p 10.204.0.3:5000:5000 -v /home/rubionoguerapablo/practica_big_data_2019:/usr/src/app flask_image
+```
+
 
 
 
