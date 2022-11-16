@@ -486,6 +486,82 @@ Al final, se destaca que a través de la interfaz web se puede iniciar el DAG in
 
 
 # Para hacer la práctica con Docker:
+
+En primer lugar, es necesario crear red:
+```
+docker network create your-network --driver bridge
+```
+
+Se crea el docker de mongo:
+```
+docker run -d  --network fbid --name mongofbid -v mongodata:/home -p 27017:27017 mongo
+```
+
+Para ejecutar el import_distances de la practica se ha tenido que modificar el fichero `import_distances.sh`, para corregir el path donde encuentra el fichero `origin_dest_distances.jsonl`. Se ha realizado ejecutando lo siguiente:
+ - Se ha modificado el fichero `import_distances.sh`, eliminando `data/` del path.
+ - Se ha ejecutado:
+
+```
+docker cp import_distances.sh mongofbid:/
+docker cp practica_big_Data_2019/data/origin_dest_distances.jsonl   mongofbid:/
+```
+
+Una vez está todo listo, se ha procedido a ejecutar el comando `docker exec mongofbid /import_distances.sh`
+
+Se ha comprobado que se han improtado los datos ejecutando el comando `docker exec -it mongofbid mongosh agile_data_science`, y posteriormente ejecutando `show collections`. Se ha comprobado que devolvía origin_dest_distances. 
+
+Para instalar Kafka 3.0.0 se han ejecutado los siguientes comandos:
+```
+docker run -d --name zookeeper-server \
+    --network fbid \
+-p 2181:2181 \
+    -e ALLOW_ANONYMOUS_LOGIN=yes \
+    bitnami/zookeeper:latest
+```
+```
+docker run -d --name kafka-server \
+    --network fbid \
+-p 9092:9092 \
+    -e ALLOW_PLAINTEXT_LISTENER=yes \
+    -e KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181 \
+-e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT \
+-e KAFKA_CFG_LISTENERS=CLIENT://:9092 \
+-e KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka-server:9092 \
+-e KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT \
+    bitnami/kafka:3.0.0
+```
+```
+docker exec kafka-server kafka-topics.sh \
+      --create \
+      --bootstrap-server kafka-server:9092 \
+      --replication-factor 1 \
+      --partitions 1 \
+      --topic flight_delay_classification_request
+```
+Se ha comprobado que se ha creado correctamente ejecutando el comando:
+```
+docker exec kafka-server kafka-topics.sh --bootstrap-server kafka-server:9092 --list
+```
+
+```
+docker exec kafka-server kafka-console-consumer.sh \
+    --bootstrap-server kafka-server:9092 \
+    --topic flight_delay_classification_request \
+    --from-beginning
+```
+
+(El máster lo tenemos que meter dentro de ubuntu para mayor comodidad).
+Para instalar Spark 2.12:
+
+```
+docker run -d --name spark-master \
+  --network=fbid \
+  -e SPARK_MODE=master \
+-p 10.204.0.3:8080:8080 \
+  bitnami/spark:3.1.2
+```
+
+A partir de aquí, se accede desde a la web UI a través de los equipos que encuentran alcanzable la dirección `172.18.0.5:8080`. 
 En el caso de google Cloud hay que exportar el puerto 8080 para que sea visible desde fuera. Eso se hace añadiendo el comando "-p direccion_interna:8080:8080" al docker run. En este caso la dirección interna es 10.204.0.3. También será necesario abrir ese puerto. 
 
 ```
@@ -538,7 +614,6 @@ Por último, se ejecuta el comando:
 ```
 docker run -d --name flask_app --network fbid -p 10.204.0.3:5000:5000 -v /home/rubionoguerapablo/practica_big_data_2019:/usr/src/app flask_image
 ```
-
 
 
 
