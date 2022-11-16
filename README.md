@@ -614,6 +614,7 @@ Por último, se ejecuta el comando:
 ```
 docker run -d --name flask_app --network fbid -p 10.204.0.3:5000:5000 -v /home/rubionoguerapablo/practica_big_data_2019:/usr/src/app flask_image
 ```
+![image](https://user-images.githubusercontent.com/116291122/202307239-8cef8d7c-2cd8-498a-8802-c206bab7c762.png)
 
 
 
