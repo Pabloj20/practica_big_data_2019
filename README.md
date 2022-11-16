@@ -550,8 +550,7 @@ docker exec kafka-server kafka-console-consumer.sh \
     --from-beginning
 ```
 
-(El máster lo tenemos que meter dentro de ubuntu para mayor comodidad).
-Para instalar Spark 2.12:
+Para instalar Spark 3.1.2:
 
 ```
 docker run -d --name spark-master \
