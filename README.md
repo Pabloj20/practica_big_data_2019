@@ -485,7 +485,7 @@ Al final, se destaca que a través de la interfaz web se puede iniciar el DAG in
 ![image](https://user-images.githubusercontent.com/116291122/201916337-9cf8ba9f-f0b2-4542-a273-bd2169b29575.png)
 
 
-#Para hacer la práctica con Docker:
+# Para hacer la práctica con Docker:
 En el caso de google Cloud hay que exportar el puerto 8080 para que sea visible desde fuera. Eso se hace añadiendo el comando "-p direccion_interna:8080:8080" al docker run. En este caso la dirección interna es 10.204.0.3. También será necesario abrir ese puerto. 
 
 ```
