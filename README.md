@@ -274,7 +274,7 @@ En la siguiente instalación no se han usado dockers:
   mongosh agile_data_science --eval 'db.origin_dest_distances.ensureIndex({Origin: 1, Dest: 1})'
 
   ```
-  Habiéndo sustituido mongo por mongosh. Una vez terminado esto, se puede ejecutar el script con el siguiente comando:
+  Habiéndo sustituido mongo por mongosh, se puede ejecutar el script con el siguiente comando:
   ```
   ./resources/import_distances.sh
   ```
