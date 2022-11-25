@@ -232,7 +232,7 @@ En la siguiente instalación no se han usado dockers:
   }
 
   ```
-  ## Train and Save de the model with PySpark mllib
+  ## Train and Save the model with PySpark mllib
   In a console go to the base directory of the cloned repo, then go to the `practica_big_data_2019` directory
   ```
     cd practica_big_data_2019
@@ -545,9 +545,9 @@ docker run -d --name flask_app --network fbid -p 10.204.0.3:5000:5000 -v /home/r
 ## DOCKER-COMPOSE
 
 Hay que cambiar el MakePrediction.scala y predict_flask.py y poner las nuevas direcciones de mongo y kafka.
-Se deben descargar los datos, entrenar el modelo y generar el jar como se ha especificado en líneas anteriores.
+Se deben [descargar los datos](#downloading-data), [entrenar el modelo](#train-and-save-the-model-with-pySpark-mllib) y [generar el jar](#run-flight-predictor).
 
-Tambien hay que modificar en el docker-compose.yml, la especificacion de dónde se encuentra la carpeta jars_dir que se debe haber creado previamente (como se especifica en la sección de docker).
+Tambien hay que modificar en el docker-compose.yml, la especificacion de dónde se encuentra la carpeta jars_dir que se debe haber creado previamente (como se especifica en la [sección de docker](#docker).
 
 Por último, en el `docker-compose.yml`, los puertos de ciertos contenedores se han expuesto añadiendo primero **10.204.0.3**. Esto es así porque esa es la red interna que está utilizando Google Cloud. En caso de querer desplegar el entorno en local, es necesario borrar esa dirección ip. Por el contrario, si se va a usar otro servidor en la nube, deberá modificar dicha red interna y poner la adecuada.
 
