@@ -1,5 +1,7 @@
 PABLO RUBIO NOGUERA - JAVIER RAMÍREZ RUIZ - MUIRST CURSO 2022/2023
 
+Desplegar el entorno siguiendo la instrucciones de [docker-compose](#DOCKER-COMPOSE). Será necesario instalarse previamente los requisitos e instalar las dependencias.
+
 ## Downloading Data
 
 Once the server comes up, download the data and you are ready to go. First change directory into the `practica_big_data_2019` directory.
