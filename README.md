@@ -545,7 +545,9 @@ docker run -d --name flask_app --network fbid -p 10.204.0.3:5000:5000 -v /home/r
 ## DOCKER-COMPOSE
 
 Hay que cambiar el MakePrediction.scala y predict_flask.py y poner las nuevas direcciones de mongo y kafka.
-El nombre de los contenedores es practica_big_data_<nombre-contenedor>_1.
+
+El nombre de los contenedores es practica_big_data_(nombre-contenedor)_1.
+
 Se deben [descargar los datos](#downloading-data), [entrenar el modelo](#train-and-save-the-model-with-pySpark-mllib) y [generar el jar](#run-flight-predictor).
 
 Tambien hay que modificar en el docker-compose.yml, la especificacion de dónde se encuentra la carpeta jars_dir que se debe haber creado previamente (como se especifica en la [sección de docker](#docker)).
