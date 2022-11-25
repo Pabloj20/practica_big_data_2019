@@ -421,64 +421,53 @@ Al final, se destaca que a través de la interfaz web se puede iniciar el DAG in
 ![image](https://user-images.githubusercontent.com/116291122/201916337-9cf8ba9f-f0b2-4542-a273-bd2169b29575.png)
 
 
-# Para hacer la práctica con DOCKER:
+## DOCKER:
 
-En primer lugar, es necesario crear red:
+En primer lugar, es necesario crear la **red**:
 ```
 docker network create your-network --driver bridge
 ```
 
-Se crea el docker de mongo:
+Se crea el docker de **mongo**:
 ```
-docker run -d  --network fbid --name mongofbid -v mongodata:/home -p 27017:27017 mongo
+docker run -d  --network fbid --name mongofbid -v /home/rubioguerapablo/practica_big_data_2019:/home/practica_big_data_2019 -p 27017:27017 mongo
 ```
+Se ha procedido a ejecutar el comando `docker exec -w /home/practica_big_data_2019 mongofbid ./resources/import_distances.sh`
 
-Para ejecutar el import_distances de la practica se ha tenido que modificar el fichero `import_distances.sh`, para corregir el path donde encuentra el fichero `origin_dest_distances.jsonl`. Se ha realizado ejecutando lo siguiente:
- - Se ha modificado el fichero `import_distances.sh`, eliminando `data/` del path.
- - Se ha ejecutado:
+Se ha comprobado que se han importado los datos ejecutando el comando `docker exec -it mongofbid mongosh agile_data_science`, y posteriormente ejecutando `show collections`. Se ha comprobado que devolvía origin_dest_distances. 
 
-```
-docker cp import_distances.sh mongofbid:/
-docker cp practica_big_Data_2019/data/origin_dest_distances.jsonl   mongofbid:/
-```
-
-Una vez está todo listo, se ha procedido a ejecutar el comando `docker exec mongofbid /import_distances.sh`
-
-Se ha comprobado que se han improtado los datos ejecutando el comando `docker exec -it mongofbid mongosh agile_data_science`, y posteriormente ejecutando `show collections`. Se ha comprobado que devolvía origin_dest_distances. 
-
-Para instalar Kafka 3.0.0 se han ejecutado los siguientes comandos:
+Para instalar **Kafka 3.0.0** se han ejecutado los siguientes comandos:
 ```
 docker run -d --name zookeeper-server \
-    --network fbid \
--p 2181:2181 \
-    -e ALLOW_ANONYMOUS_LOGIN=yes \
-    bitnami/zookeeper:latest
+ --network fbid \
+ -p 2181:2181 \
+ -e ALLOW_ANONYMOUS_LOGIN=yes \
+ bitnami/zookeeper:latest
 ```
 ```
 docker run -d --name kafka-server \
-    --network fbid \
--p 9092:9092 \
-    -e ALLOW_PLAINTEXT_LISTENER=yes \
-    -e KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181 \
--e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT \
--e KAFKA_CFG_LISTENERS=CLIENT://:9092 \
--e KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka-server:9092 \
--e KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT \
-    bitnami/kafka:3.0.0
+ --network fbid \
+ -p 9092:9092 \
+ -e ALLOW_PLAINTEXT_LISTENER=yes \
+ -e KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181 \
+ -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT \
+ -e KAFKA_CFG_LISTENERS=CLIENT://:9092 \
+ -e KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka-server:9092 \
+ -e KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT \
+ bitnami/kafka:3.0.0
 ```
 ```
 docker exec kafka-server kafka-topics.sh \
-      --create \
-      --bootstrap-server kafka-server:9092 \
-      --replication-factor 1 \
-      --partitions 1 \
-      --topic flight_delay_classification_request
+ --create \
+ --bootstrap-server kafka-server:9092 \
+ --replication-factor 1 \
+ --partitions 1 \
+ --topic flight_delay_classification_request
 ```
 Se ha comprobado que se ha creado correctamente ejecutando el comando:
 ```
 docker exec kafka-server kafka-topics.sh --bootstrap-server kafka-server:9092 --list
 ```
-
 ```
 docker exec kafka-server kafka-console-consumer.sh \
     --bootstrap-server kafka-server:9092 \
@@ -486,7 +475,7 @@ docker exec kafka-server kafka-console-consumer.sh \
     --from-beginning
 ```
 
-Para instalar Spark 3.1.2:
+Para instalar **Spark 3.1.2**:
 
 ```
 docker run -d --name spark-master \
@@ -519,7 +508,7 @@ spark-submit --master spark://spark-master:7077 --deploy-mode cluster \
 /home/practica_big_data_2019/flight_prediction/target/scala-2.12/flight_prediction_2.12-0.1.jar
 ```
 
-Para el docker de flask lo primero que hay que hacer es modificar dónde se encuentra kafka. En nuestro caso es en `kafka-server:9092`.
+Para el docker de **flask** lo primero que hay que hacer es modificar dónde se encuentra kafka. En nuestro caso es en `kafka-server:9092`.
 Tambien hay que cambiar la dirección de mongo que será: MongoClient('mongodb://mongofbid:27017')
 En la carpeta practica_big_data_2019 se crea el siguiente Dockerfile:
 
@@ -551,12 +540,14 @@ docker run -d --name flask_app --network fbid -p 10.204.0.3:5000:5000 -v /home/r
 ```
 ![image](https://user-images.githubusercontent.com/116291122/202307239-8cef8d7c-2cd8-498a-8802-c206bab7c762.png)
 
-## DOCKER-COMPOSE:
+## DOCKER-COMPOSE
 
-Hay que cambiar el MakePrediction.scala y predict_flask.py y poner las nuevas direcciones de mongo y kafka
+Hay que cambiar el MakePrediction.scala y predict_flask.py y poner las nuevas direcciones de mongo y kafka.
 Se deben descargar los datos, entrenar el modelo y generar el jar como se ha especificado en líneas anteriores.
 
-Tambien hay que modificar en el docker-compose.yml, la especificacion de dónde se encuentra la carpeta jars_dir que se debe haber creado previamente (como se especifica en la sección de docker)
+Tambien hay que modificar en el docker-compose.yml, la especificacion de dónde se encuentra la carpeta jars_dir que se debe haber creado previamente (como se especifica en la sección de docker).
+
+Por último, en el `docker-compose.yml`, los puertos de ciertos contenedores se han expuesto añadiendo primero **10.204.0.3**. Esto es así porque esa es la red interna que está utilizando Google Cloud. En caso de querer desplegar el entorno en local, es necesario borrar esa dirección ip. Por el contrario, si se va a usar otro servidor en la nube, deberá modificar dicha red interna y poner la adecuada.
 
 Desde la carpeta del proyecto se ejecuta: `docker-compose up -d`
 
