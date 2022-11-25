@@ -493,7 +493,7 @@ docker run -d --name spark-worker \
   --network=fbid \
   -e SPARK_MODE=worker \
 -p 10.204.0.3:8081:8081 \
--v dataworker:/home \
+-v /home/rubionoguerapablo/practica_big_data_2019:/home/practica_big_data_2019 \
 -v /home/rubionoguerapablo/jars_dir:/opt/bitnami/spark/.ivy2:z \
   bitnami/spark:3.1.2
 ```
