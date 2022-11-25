@@ -500,7 +500,7 @@ docker run -d --name spark-worker \
   bitnami/spark:3.1.2
 ```
 
-jars_dir debe contener las dependencias de maven que se encuentran en /root/.ivy2
+**jars_dir** debe contener las dependencias de maven que se encuentran en /root/.ivy2
 Para que se pueda ejecutar el `spark-submit` es necesario crear un darle permiso de tipo 777 a jars_dir. El comando es sudo `chmod -R 777 jars_dir/`
 
 ```
