@@ -421,7 +421,7 @@ Al final, se destaca que a través de la interfaz web se puede iniciar el DAG in
 ![image](https://user-images.githubusercontent.com/116291122/201916337-9cf8ba9f-f0b2-4542-a273-bd2169b29575.png)
 
 
-# Para hacer la práctica con Docker:
+# Para hacer la práctica con DOCKER:
 
 En primer lugar, es necesario crear red:
 ```
@@ -550,6 +550,49 @@ Por último, se ejecuta el comando:
 docker run -d --name flask_app --network fbid -p 10.204.0.3:5000:5000 -v /home/rubionoguerapablo/practica_big_data_2019:/usr/src/app flask_image
 ```
 ![image](https://user-images.githubusercontent.com/116291122/202307239-8cef8d7c-2cd8-498a-8802-c206bab7c762.png)
+
+## DOCKER-COMPOSE:
+
+Hay que cambiar el MakePrediction.scala y predict_flask.py y poner las nuevas direcciones de mongo y kafka
+Se deben descargar los datos, entrenar el modelo y generar el jar como se ha especificado en líneas anteriores.
+
+Tambien hay que modificar en el docker-compose.yml, la especificacion de dónde se encuentra la carpeta jars_dir que se debe haber creado previamente (como se especifica en la sección de docker)
+
+Desde la carpeta del proyecto se ejecuta: `docker-compose up -d`
+
+Una vez que se ha lanzado el docker-compose es necesario ejecutar ciertos comandos en diversos contenedores:
+
+### **Kafka**
+
+```
+docker exec practica_big_data_2019_kafka-server_1 kafka-topics.sh --create \
+ --bootstrap-server practica_big_data_2019_kafka-server_1:9092 \
+ --replication-factor 1 \
+ --partitions 1 \
+ --topic flight_delay_classification_request
+```
+
+Si se quiere lanzar un consumer:
+
+```
+docker exec practica_big_data_2019_kafka-server_1 kafka-console-consumer.sh \
+ --bootstrap-server practica_big_data_2019_kafka-server_1:9092 \
+ --topic flight_delay_classification_request \
+ --from-beginning
+```
+ 
+### **Mongo**
+ 
+`docker exec -w /home/practica_big_data_2019 practica_big_data_2019_mongo_1 ./resources/import_distances.sh`
+ 
+### **Spark-Worker**
+ 
+```
+docker exec practica_big_data_2019_spark-worker_1 \
+ spark-submit --master spark://spark-master:7077 --deploy-mode cluster \
+ --packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.1,org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.2 \
+ /home/practica_big_data_2019/flight_prediction/target/scala-2.12/flight_prediction_2.12-0.1.jar
+```
 
 
 
