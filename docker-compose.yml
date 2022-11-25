@@ -1,0 +1,64 @@
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - fbid
+    volumes:
+      - .:/home/practica_big_data_2019
+
+  zookeeper-server:
+    image: bitnami/zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - fbid
+  
+  kafka-server:
+    image: bitnami/kafka:3.0.0
+    ports:
+      - "9092:9092"
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://practica_big_data_2019_kafka-server_1:9092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+    networks:
+      - fbid
+    
+  spark-master:
+    image: bitnami/spark:3.1.2
+    ports:
+      - "10.204.0.3:8080:8080"
+    environment:
+      - SPARK_MODE=master
+    networks: 
+      - fbid
+
+  spark-worker:
+    image: bitnami/spark:3.1.2
+    ports:
+      - "10.204.0.3:8081:8081"
+    environment:
+      - SPARK_MODE=worker
+    networks:
+      - fbid
+    volumes:
+      - .:/home/practica_big_data_2019
+      - /home/rubionoguerapablo/jars_dir:/opt/bitnami/spark/.ivy2
+
+  flask_app:
+    build: .
+    ports:
+      - "10.204.0.3:5000:5000"
+    networks:
+      - fbid
+    volumes:
+      - ./usr/src/app
+networks:
+  fbid: {}
