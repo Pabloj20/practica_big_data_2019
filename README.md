@@ -256,7 +256,7 @@ En la siguiente instalación no se han usado dockers:
     
   ``` 
   
-  Una vez cambiado el `base_path`, nos volvemos a situar en la carpeta flight_prediction, y ejecutamos los siguientes comandos:
+  Una vez cambiado el `base_path`, nos situamos en la carpeta flight_prediction, y ejecutamos los siguientes comandos:
   ```
   sbt
   compile
