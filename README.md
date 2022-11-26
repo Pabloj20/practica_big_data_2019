@@ -256,13 +256,13 @@ En la siguiente instalación no se han usado dockers:
     
   ``` 
   
-  Una vez cambiado el `base_path`, nos volvemos a situar en la carpeta raíz del proyecto, y ejecutamos los siguientes comandos:
+  Una vez cambiado el `base_path`, nos volvemos a situar en la carpeta flight_prediction, y ejecutamos los siguientes comandos:
   ```
   sbt
   compile
   package
   ```
-  Una vez terminado, salimos de sbt, y comprobamos que en el directorio target/scala-2.12/ está el JAR compilado.
+  Una vez terminado, salimos de sbt, y comprobamos que en el directorio flight_prediction/target/scala-2.12/ está el JAR compilado.
   
   Then run the code using Intellij or spark-submit with their respective arguments. 
   
